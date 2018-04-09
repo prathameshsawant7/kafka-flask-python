@@ -1,0 +1,176 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS Dashboard</title>
+    <link rel="stylesheet" href="/static/css/foundation.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <div class="md-tabs">
+      <div class="mobile-nav-bar title-bar">
+        <div class="title-bar-left">
+          <button class="menu-icon" type="button"></button>
+        </div>
+        <div class="title-bar-center">
+          <span class="title-bar-text">Dashboard</span>
+        </div>
+        <div class="title-bar-right">
+          <button class="menu-icon" type="button"></button>
+        </div>
+      </div>
+
+      <ul class="tabs" data-responsive-accordion-tabs="tabs small-accordion medium-tabs large-tabs" id="collapsing-tabs" data-allow-all-closed="true" data-multi-expand="true">
+        <li class="tabs-title is-active"><a href="#panel1c" aria-selected="true">Top 100 logs</a></li>
+        <li class="tabs-title"><a href="#panel2c">User Profiles</a></li>
+        <li class="tabs-title"><a href="#panel3c">Add Transaction to Queue</a></li>
+        <div class="slide"></div>
+      </ul>
+
+      <div class="tabs-content" data-tabs-content="collapsing-tabs">
+        <div class="tabs-panel is-active" id="panel1c">
+          <p>
+            <table class="table-expand">
+              <thead>
+                <tr class="table-expand-row">
+                  <th width="200">User ID</th>
+                  <th>Transaction Date</th>
+                  <th>Transaction Type</th>
+                  <th>Transaction Amount</th>
+                  <th class="text-right">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for userRow in data.userData %}
+                  <tr class="table-expand-row" data-open-details>
+                    <td>{{userRow[1]}}</td>
+                    <td>{{userRow[2]}}</td>
+                    <td>{% if userRow[3]=='C' %}Credit{% else %}Debit{% endif %}</td>
+                    <td>{{userRow[4]}}</td>
+                    <td class="text-right">more info <span class="expand-icon"></span></td>
+                  </tr>
+
+                  <tr class="table-expand-row-content">
+                    <td colspan="8" class="table-expand-row-nested">
+                      <p>
+                        <b>Total Balance : </b>{{userRow[5]}} <b> || </b>   
+                        <b>Standard Deviation Of Transaction Amount : </b>{{userRow[6]}} <b> || </b> 
+                        <b>Transaction Marked : </b>{% if userRow[7]==1 %}Yes{% else %}No{% endif %}
+                      </p>
+                    </td>
+                  </tr>
+                {% endfor%}
+              </tbody>
+            </table>
+          </p>
+        </div>
+        <div class="tabs-panel" id="panel2c">
+          <p>
+              <b>Select User ID : </b>
+              <select class="select-box js-example-responsive" onchange="getUserData()" style="width: 50%" id="select_user_id">
+                <option value="">User ID</option>
+                {% for userList in data.userList %}
+                  <option value="{{userList[0]}}">{{userList[0]}}</option>
+                {% endfor%}
+              </select>
+          </p>
+          <div id="user_data"></div>
+        </div>
+        <div class="tabs-panel" id="panel3c">
+          <form id="addTransactionForm" name="addTransactionForm">
+              <table class="table-expand">
+              <thead>
+                <tr class="table-expand-row">
+                  <th width="200">User ID</th>
+                  <th>Transaction Date</th>
+                  <th>Transaction Type</th>
+                  <th>Transaction Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="text" name="user_id"/></td>
+                  <td><input type="text" name="trans_date"/></td>
+                  <td>
+                    <select name="trans_type">
+                      <option value="C" selected="selected">Credit</option>
+                      <option value="D">Debit</option>  
+                    </select>
+                  </td>
+                  <td><input type="text" name="trans_amt"/></td>
+                </tr>
+              </tbody>
+            </table>
+            <input type="button" value="Submit" class="button" onclick="addTransaction()">
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/js/vendor/jquery.js"></script>
+    <script src="/static/js/vendor/what-input.js"></script>
+    <script src="/static/js/vendor/foundation.js"></script>
+    <script src="/static/js/app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+
+        $('.select-box').select2({
+          placeholder: 'Select An Option',
+          theme: "classic"
+        });
+        $('[data-open-details]').click(function (e) {
+          e.preventDefault();
+          $(this).next().toggleClass('is-active');
+          $(this).toggleClass('is-active');
+        });
+      });
+
+      function getUserData(){
+        var user_id = $('#select_user_id').val();
+        if(typeof user_id !== 'undefined' && user_id != ''){
+          var request = $.ajax({
+            url: "/getUserData",
+            type: "POST",
+            data: JSON.stringify('{"user_id" : '+user_id+'}'),
+            contentType: 'application/json;charset=UTF-8'
+          });
+
+          request.done(function(msg) {
+            $("#user_data").html( msg );
+          });
+
+          request.fail(function(jqXHR, textStatus) {
+            alert( "Request failed: " + textStatus );
+          });
+        }else{
+          alert("Please select User ID.")
+        }
+      }
+
+      function addTransaction(){
+        if($('#user_id').val() != '' && $('#trans_date').val() != '' && $('#trans_type').val() != '' && $('#trans_amt').val() != ''){
+          $.ajax({
+            url: '/addTransaction',
+            data: $('#addTransactionForm').serialize(),
+            type: 'POST',
+            success: function(response) {
+                alert(response);
+                window.location.reload();
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+        }else{
+          alert("Fill all fields");
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,182 @@
+
+.md-tabs {
+  background-color: #1779BA;
+}
+
+/*.md-tabs > .mobile-nav-bar {
+  background-color: #1779BA;
+  margin-bottom: 15px;
+}*/
+
+.md-tabs > .mobile-nav-bar .title-bar-text {
+  font-size: 26px;
+}
+
+.md-tabs > .mobile-nav-bar a {
+  color: #fefefe;
+}
+
+.md-tabs > .tabs {
+  margin: 0;
+  border: 0;
+  background: #1779BA;
+  list-style-type: none;
+  display: table;
+  width: 100%;
+}
+
+.md-tabs > .tabs > .tabs-title {
+  display: table-cell;
+  width: 25%;
+  text-align: center;
+  display: inline-block;
+}
+
+.md-tabs > .tabs > .tabs-title.is-active > a {
+  color: #0C004E;
+  background-color: transparent;
+  outline: none;
+}
+
+.md-tabs > .tabs > .tabs-title.is-active:nth-of-type(1) ~ .slide {
+  left: calc((100% / 4) * 0);
+}
+
+.md-tabs > .tabs > .tabs-title.is-active:nth-of-type(2) ~ .slide {
+  left: calc((100% / 4) * 1);
+}
+
+.md-tabs > .tabs > .tabs-title.is-active:nth-of-type(3) ~ .slide {
+  left: calc((100% / 4) * 2);
+}
+
+.md-tabs > .tabs > .tabs-title.is-active:nth-of-type(4) ~ .slide {
+  left: calc((100% / 4) * 3);
+}
+
+.md-tabs > .tabs > .tabs-title > a {
+  color: #fefefe;
+  font-size: 16px;
+}
+
+.md-tabs > .tabs > .tabs-title > a:hover, .md-tabs > .tabs > .tabs-title > a:focus {
+  background: transparent;
+}
+
+.slide {
+  background: #3ADB76;
+  width: calc(100% / 4);
+  height: 4px;
+  position: relative;
+  left: 0;
+  top: 52px;
+  transition: left 0.3s ease-out;
+}
+
+
+.table-expand {
+  margin-top: 5rem;
+}
+
+.table-expand td {
+  color: #8a8a8a;
+}
+
+.table-expand tr {
+  border: 1px solid #e6e6e6;
+}
+
+.table-expand .text-right {
+  padding-right: 3rem;
+}
+
+.table-expand-row.is-active .expand-icon::after {
+  content: '-';
+}
+
+.table-expand-row .expand-icon::after {
+  content: '+';
+  float: right;
+}
+
+.table-expand-row-content {
+  display: none;
+}
+
+.table-expand-row-content.is-active {
+  display: table-row;
+  -webkit-animation: fadeIn ease-in 1;
+          animation: fadeIn ease-in 1;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  -webkit-animation-duration: 0.5s;
+          animation-duration: 0.5s;
+}
+
+.table-expand-row-nested {
+  background-color: #e6e6e6;
+}
+
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+
+@media screen and (max-width: 39.9375em) {
+  .slide {
+    width: 0;
+    height: 0;
+  }
+  .md-tabs > .accordion {
+    margin-left: 0;
+    list-style-type: none;
+  }
+  .md-tabs > .accordion > .accordion-item > .accordion-title {
+    position: relative;
+    display: block;
+    padding: 1.25rem 1rem;
+    border: 0;
+    font-size: 0.75rem;
+    line-height: 1;
+    background: #1779BA;
+    color: #fefefe;
+  }
+  .md-tabs > .accordion > .accordion-item > .accordion-title:hover {
+    background-color: #1779BA;
+    color: #3ADB76;
+    outline: none;
+  }
+  .md-tabs > .accordion > .is-active.accordion-item > a.accordion-title {
+    border-bottom: 4px solid #3ADB76;
+    color: #3ADB76;
+  }
+  .md-tabs > .accordion > .accordion-item > .accordion-content {
+    display: none;
+    padding: 1rem;
+    border: 1px solid #e6e6e6;
+    border-top: 0px;
+    background-color: #fefefe;
+    color: #0a0a0a;
+  }
+  > .accordion > .accordion-item > .accordion-title:focus {
+    background-color: #1779BA;
+    color: #3ADB76;
+    outline: none;
+  }
+}
+

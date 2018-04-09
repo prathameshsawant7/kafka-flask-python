@@ -1,0 +1,39 @@
+<table class="table-expand">
+  <thead>
+    <tr class="table-expand-row">
+      <th width="200">User ID</th>
+      <th>Transaction Date</th>
+      <th>Transaction Type</th>
+      <th>Transaction Amount</th>
+      <th class="text-right">Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for userRow in data.userData %}
+      <tr class="table-expand-row" data-open-details>
+        <td>{{userRow[1]}}</td>
+        <td>{{userRow[2]}}</td>
+        <td>{% if userRow[3]=='C' %}Credit{% else %}Debit{% endif %}</td>
+        <td>{{userRow[4]}}</td>
+        <td class="text-right">more info <span class="expand-icon"></span></td>
+      </tr>
+
+      <tr class="table-expand-row-content">
+        <td colspan="8" class="table-expand-row-nested">
+          <p>
+            <b>Total Balance : </b>{{userRow[5]}} <b> || </b>   
+            <b>Standard Deviation Of Transaction Amount : </b>{{userRow[6]}} <b> || </b> 
+            <b>Transaction Marked : </b>{% if userRow[7]==1 %}Yes{% else %}No{% endif %}
+          </p>
+        </td>
+      </tr>
+    {% endfor%}
+  </tbody>
+</table>
+<script type="text/javascript">
+	$('[data-open-details]').click(function (e) {
+      e.preventDefault();
+      $(this).next().toggleClass('is-active');
+      $(this).toggleClass('is-active');
+    });
+</script>
